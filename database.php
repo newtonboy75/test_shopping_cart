@@ -16,7 +16,7 @@ class Database{
   public function db_connect():object{
     $this->host = 'localhost';
     $this->user = 'root';
-    $this->pass = 'renton75';
+    $this->pass = '';
     $this->db = 'products';
     $this->mysqli = new \MySQLi($this->host, $this->user, $this->pass, $this->db) or die(mysqli_error());
     return $this->mysqli;
