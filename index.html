@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Newton's Store</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+  <style>
+  body{
+      font-family: 'Open Sans', sans-serif;
+      font-size: 14px;
+  }
+  .main-container{
+    margin-top:50px;
+  }
+  .product-grid {
+      text-align: center;
+  }
+  .grid-images {
+      height: 200px;
+      background: #aaa;
+  }
+  .buy-btn{
+      min-width: 100px;
+      margin-top: 5px;
+      background: #3ca88b;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight:bold;
+  }
+  .buy-btn:hover{
+    opacity: 0.8;
+  }
+  .logo-holder{
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .logo-holder img{
+    width:280px;
+  }
+  .user-cart-holder{
+     width:100%;
+     margin-top:20px;
+     margin-bottom: 30px;
+     clear:both;
+     text-align: center;
+  }
+  .checked{
+    color:orange;
+  }
+  .rate-star{
+    font-size: 25px;
+  }
+  </style>
+</head>
+<body>
+<div  id="app">
+<nav class="navbar">
+  <div class="logo-holder center-block"><img src="./images/newton_logo.png"></div>
+  <div class="user-cart-holder center-block">
+    <div class="">
+      Hello accout login -
+        <span @click="showCartItems()">{{ cartItems.length + (cartItems.length > 1 || cartItems.length === 0 ? " items" : " item") }}</span>
+       - checkout
+    </div>
+  </div>
+</nav>
+<div class="container main-container">
+<div class="row">
+
+  <div class="col-4 product-grid" v-for="item in items" >
+      <div class="image-holder view zoom"><a href="#"><img :src="'images/' + item.product_image" class="img-fluid grid-images"></a></div>
+      <div class="product-description">{{item.name}}</div>
+      <div class="product-rating">
+        <span class="rate-star checked">&#9733;</span>
+        <span class="rate-star checked">&#9733;</span>
+        <span class="rate-star checked">&#9733;</span>
+        <span class="rate-star">&#9733;</span>
+        <span class="rate-star">&#9733;</span>
+      </div>
+      <div class="ont-weight-bold">${{item.unit_price}}</div>
+      <div><button class="btn buy-btn" @click="addToCart(item)">ADD TO CART</button></div>
+  </div>
+
+</div>
+</div>
+
+<div>
+  <p>Footer</p>
+</div>
+
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="script/app.js"></script>
+
+</body>
+</html>
