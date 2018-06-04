@@ -1,6 +1,5 @@
 <?php
-
-namespace DbConnector;
+namespace Newton;
 
 class Database{
   private $host;
@@ -16,7 +15,7 @@ class Database{
   public function db_connect():object{
     $this->host = 'localhost';
     $this->user = 'root';
-    $this->pass = '';
+    $this->pass = 'renton75';
     $this->db = 'products';
     $this->mysqli = new \MySQLi($this->host, $this->user, $this->pass, $this->db) or die(mysqli_error());
     return $this->mysqli;
