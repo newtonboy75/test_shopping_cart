@@ -28,7 +28,7 @@ class Products implements Action
         (SELECT SUM(rt.rating) FROM product_rating rt WHERE rt.product_id = p.id AND rt.rating = 4) AS sum_rating4,
         (SELECT SUM(rt.rating) FROM product_rating rt WHERE rt.product_id = p.id AND rt.rating = 5) AS sum_rating5
 
-        FROM product p JOIN product_image pi ON p.image = pi.id";
+        FROM product p JOIN product_image pi ON p.image = pi.id ORDER BY id ASC";
 
             if ($stmt = $conn->prepare($query)) {
                 $stmt->execute();

@@ -26,12 +26,12 @@ class Customer
 
   public function authenticateCustomer(){
     $conn = $this->connectToDb();
-    $query = "SELECT username, password FROM user WHERE username = ?";
+    $query = "SELECT u.username, u.password, cb.balance FROM user u JOIN customer_balance cb ON u.id = cb. customer_id WHERE username = ?";
 
     if ($stmt = $conn->prepare($query)) {
       $stmt->execute();
       $stmt->bind_param("s", $this->username);
-      $stmt->bind_result($username, $password);
+      $stmt->bind_result($username, $password, $balance);
       $stmt->execute();
       $result = $stmt->get_result();
       if($result->num_rows === 0) exit('No rows');
@@ -40,7 +40,7 @@ class Customer
       if(!$this->checkPassword($pass[1])){
         $user['user'] = '0';
       }else{
-              $user = array('user'=>$pass[0]);
+              $user = array('user'=>$pass[0], 'balance'=>$pass[2]);
       }
 
       $stmt->close();
