@@ -34,7 +34,7 @@ class Customer
       $stmt->bind_result($username, $password, $balance);
       $stmt->execute();
       $result = $stmt->get_result();
-      if($result->num_rows === 0) exit('No rows');
+      if($result->num_rows === 0) exit('0');
       $pass = $result->fetch_array(MYSQLI_NUM);
 
       if(!$this->checkPassword($pass[1])){

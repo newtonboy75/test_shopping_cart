@@ -1,14 +1,18 @@
 <template>
   <div id="app">
   <nav class="navbar">
-  <div class="logo-holder center-block"><img src="@/assets/newton_logo.png"></div>
+  <div class="logo-holder center-block"><router-link to="/"><img src="@/assets/newton_logo.png"></router-link></div>
   <div class="user-cart-holder center-block">
-    <div class="float-right">
-        <a class="user" href="#" @click="getUser">{{(this.$store.state.loggedUser.length === 0 ? "Login" : this.$store.state.loggedUser[0].user)}}</a> -
-        <span>Current Balance: ${{(this.$store.state.loggedUser.length === 0 ? "0" : this.$store.state.loggedUser[0].balance)}}</span> &nbsp;&nbsp;&nbsp;&nbsp;
-        <span @click="showCartItems()">{{( itemCounts > 0 ? " items" : " item")}} {{itemCounts}}</span>
-        <router-link to="/cart">Checkout</router-link>
-    </div>
+    <ul class="float-right list-inline  user-links">
+      <li class="nav-item nav-link">
+      <span v-if="(this.$store.state.loggedUser.length === 0)" class="nav-item"><router-link to="/login">Login</router-link></span>
+      <span class="text-capitalize" v-else>Hello <router-link to="/admin">{{this.$store.state.loggedUser[0].user}}</router-link></span>
+        <span v-if="(this.$store.state.loggedUser.length !== 0)">(Balance: ${{(this.$store.state.loggedUser.length === 0 ? "0" : this.$store.state.loggedUser[0].balance)}})</span>
+      </li>
+      <li class="nav-item  nav-link">
+        <router-link to="/cart">Checkout (<span @click="showCartItems()">{{( itemCounts > 0 ? " items" : " item")}} {{itemCounts}}</span>)</router-link>
+      </li>
+    </ul>
   </div>
 </nav>
 <!--
@@ -50,32 +54,10 @@ export default {
     },
     ...mapMutations([
      'addUser'
-    ]),
-    getUser(){
-    if(this.$store.state.loggedUser.length === 0){
-
-      axios.get('http://localhost/test_shopping_cart/Main.php?dest=user&username=newton&password=admin')
-      .then(response => {
-      console.log("users " +response.data.user);
-
-        this.addUser(this.user = response.data);
-        this.$store.commit('addUser');
-
-      })
-      .catch(function (error) {
-        console.log("user" + error);
-      });
-      }
-
-    }
+    ])
   },
   mounted(){
-
-
-
   }
-
-
 }
 </script>
 <style>
@@ -89,9 +71,9 @@ export default {
   font-size: 13px;
 }
   .main-container{
-    margin-top:20px;
-    margin-left:100px;
-    margin-right:100px;
+    width:85%;
+    margin-left:auto;
+    margin-right:auto;
   }
   .user{text-transform: capitalize;}
   .product-grid {
@@ -99,11 +81,11 @@ export default {
       margin-bottom: 30px;
   }
   .grid-images {
-    width:254px;
-    height: 254px;
-    min-width: 200px;
-    min-height: 200px;
-    margin-bottom:10px;
+    width:240px;
+    height: 240px;
+    min-width: 180px;
+    min-height: 180px;
+    margin-bottom:20px;
     background: #aaa;
 
   }
@@ -123,15 +105,19 @@ export default {
     margin-right: auto;
   }
   .logo-holder img{
-    width:280px;
+    width:270px;
   }
   .user-cart-holder{
      width:87%;
-     margin-top:20px;
-     margin-bottom: 30px;
+     margin-top:10px;
+     margin-bottom: 10px;
      clear:both;
      text-align: center;
      font-size:13px;
+  }
+
+  .user-links li{
+  float:left;
   }
   .checked{
     color:orange;
