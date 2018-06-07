@@ -10,7 +10,7 @@
         <span v-if="(this.$store.state.loggedUser.length !== 0)">(Balance: ${{(this.$store.state.loggedUser.length === 0 ? "0" : this.$store.state.loggedUser[0].balance)}})</span>
       </li>
       <li class="nav-item  nav-link">
-        <router-link to="/cart">Checkout (<span @click="showCartItems()">{{( itemCounts > 0 ? " items" : " item")}} {{itemCounts}}</span>)</router-link>
+        <router-link to="/cart">Checkout (<span>{{( itemCounts > 0 ? " items" : " item")}} {{itemCounts}}</span>)</router-link>
       </li>
     </ul>
   </div>
@@ -18,6 +18,7 @@
 <!--
 <button @click="loadItems">test</button>
 -->
+<div id="demo"></div>
     <router-view/>
     <div class="footer">&copy; 2018 Newton's Store</div>
   </div>
