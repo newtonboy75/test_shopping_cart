@@ -10,7 +10,7 @@
         <span v-if="(this.$store.state.loggedUser.length !== 0)">(Balance: ${{(this.$store.state.loggedUser.length === 0 ? "0" : this.$store.state.loggedUser[0].balance)}})</span>
       </li>
       <li class="nav-item  nav-link">
-        <router-link to="/cart">Checkout (<span>{{( itemCounts > 0 ? " items" : " item")}} {{itemCounts}}</span>)</router-link>
+        <router-link to="/cart">Checkout (<span> {{this.$store.state.cartItemCount}} {{( this.$store.state.cartItemCount > 0 ? " items" : " item")}} </span>)</router-link>
       </li>
     </ul>
   </div>
@@ -26,7 +26,6 @@
 
 <script>
 import axios from 'axios'
-import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
 import { mapMutations } from 'vuex'
 import * as Cookies from "js-cookie";
@@ -37,12 +36,13 @@ export default {
     return {
     user: [],
     cartItems: [],
+    currentItemCounts: '44'
     }
   },
   computed: {
-    itemCounts(){
-      return this.$store.state.cartItems.length
-    },
+    cartItemCount: function (){
+      return this.$store.state.cartItemCount;
+    }
   },
   methods: {
     loadItems(){
@@ -55,7 +55,7 @@ export default {
     },
     ...mapMutations([
      'addUser'
-    ])
+    ]),
   },
   mounted(){
   }

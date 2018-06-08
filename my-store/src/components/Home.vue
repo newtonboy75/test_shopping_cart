@@ -27,18 +27,18 @@ export default {
   name: 'Home',
   data () {
     return {
-      items: []
+      items: [],
     }
   },
   mounted(){
-  axios.get('http://localhost/test_shopping_cart/Main.php?dest=products')
-  .then(response => {
-  console.log("items" +response.data);
-  this.items = response.data;
-  })
-  .catch(function (error) {
-    console.log("items" + error);
-  });
+    axios.get('http://localhost/test_shopping_cart/Main.php?dest=products')
+    .then(response => {
+    //console.log("items" +response.data);
+    this.items = response.data;
+    })
+    .catch(function (error) {
+      console.log("items" + error);
+    });
   },
   methods: {
     getSrc(name) {
@@ -49,9 +49,8 @@ export default {
       'addCart'
     ]),
     addCartItem(){
-      //this.$store.commit('addCart');
-      //this.addCart(this.item)
       this.$store.commit('addCart');
+      this.currentItemCount();
     }
   }
 }
