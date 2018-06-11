@@ -1,25 +1,27 @@
 <template>
   <div id="app">
   <nav class="navbar">
-  <div class="logo-holder center-block"><router-link to="/"><img src="@/assets/newton_logo.png"></router-link></div>
+  <div class="logo-holder center-block"><a href="/" @click="goToCart"><img src="@/assets/newton_logo.png"></a></div>
   <div class="user-cart-holder center-block">
     <ul class="float-right list-inline  user-links">
       <li class="nav-item nav-link">
       <span v-if="(this.$store.state.loggedUser.length === 0)" class="nav-item"><router-link to="/login">Login</router-link></span>
       <span class="text-capitalize" v-else>Hello <router-link to="/admin">{{this.$store.state.loggedUser[0].user}}</router-link></span>
-        <span v-if="(this.$store.state.loggedUser.length !== 0)">(Balance: ${{(this.$store.state.loggedUser.length === 0 ? "0" : this.$store.state.loggedUser[0].balance)}})</span>
+        <span v-if="(this.$store.state.loggedUser.length !== 0)"> (<a href="#" @click="logOut()">logout</a>) - Current Store Balance: ${{(this.$store.state.loggedUser.length === 0 ? "0" : this.$store.state.loggedUser[0].balance)}}</span>
       </li>
       <li class="nav-item  nav-link">
-        <router-link to="/cart">Checkout (<span> {{this.$store.state.cartItemCount}} {{( this.$store.state.cartItemCount > 0 ? " items" : " item")}} </span>)</router-link>
+        <router-link to="/cart">Cart (<span> {{this.$store.state.cartItemCount > 0 ? this.$store.state.cartItemCount : " 0"}} {{( this.$store.state.cartItemCount > 0 ? " items" : " item")}} </span>)</router-link>
       </li>
+          <div v-if="this.$store.state.info !==''" class="alert alert-success info">{{this.$store.state.info}}</div>
+          <div v-if="this.$store.state.warning !=''" class="alert alert-warning cart-warning info">
+            {{this.$store.state.warning}}
+          </div>
     </ul>
   </div>
 </nav>
-<!--
-<button @click="loadItems">test</button>
--->
+
 <div id="demo"></div>
-    <router-view/>
+    <router-view :key="$route.fullPath"/>
     <div class="footer">&copy; 2018 Newton's Store</div>
   </div>
 </template>
@@ -36,29 +38,27 @@ export default {
     return {
     user: [],
     cartItems: [],
-    currentItemCounts: '44'
     }
   },
+
   computed: {
     cartItemCount: function (){
       return this.$store.state.cartItemCount;
     }
   },
   methods: {
-    loadItems(){
-      document.getElementById("demo").innerHTML = '';
-      var x = "";
-      var myObj = Cookies.get();
-      for (x in myObj) {
-        document.getElementById("demo").innerHTML += myObj[x];
-        }
+
+    goToCart(){
+      location.reload();
+    },
+    logOut(){
+      this.$store.commit('removeUser');
+      location.reload();
     },
     ...mapMutations([
-     'addUser'
+     'addUser', 'removeUser'
     ]),
   },
-  mounted(){
-  }
 }
 </script>
 <style>
@@ -73,6 +73,7 @@ export default {
 }
   .main-container{
     width:85%;
+    margin-top:20px;
     margin-left:auto;
     margin-right:auto;
   }
@@ -120,7 +121,8 @@ export default {
   .user-links li{
   float:left;
   }
-  .checked{
+
+  .ratings .checked{
     color:orange;
   }
   .rate-star{
@@ -135,4 +137,26 @@ export default {
     margin-left:auto;
     margin-right:auto;
   }
+
+  .ratings span {
+    color: #c5c5c5;
+  }
+
+  .ratings:hover span {
+    cursor: pointer;
+    color: orange;
+  }
+
+  .ratings span:hover ~ span {
+    color: #c5c5c5;
+  }
+
+  .info{
+  max-width:400px;
+    position: absolute;
+    margin-top: 42px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+
 </style>

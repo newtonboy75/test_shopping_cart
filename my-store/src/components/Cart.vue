@@ -1,5 +1,6 @@
 <template>
   <div class="main-container container">
+  <h5>Cart</h5>
   <div v-if="this.$store.state.cartItems.length ===0">
     There is no item in your cart.
   </div>
@@ -24,7 +25,7 @@
 
               </div>
               <div class="col-6 align-middle product-name mx-auto">{{cartItem.name}}
-                <div @click="removeFromCart(cartItem)"><br>[x] Remove</div>
+                <div @click="removeFromCart(cartItem)"><br><br>[x] Remove</div>
               </div>
               </div>
             </div>
@@ -32,10 +33,7 @@
             <div class="col-6">
             <div class="row align-middle valign-text text-center">
               <div class="col-8"><div class="text-center mx-auto">
-
-                  <input style="font-size:13px; width: 56px" class="text-center form-control mx-auto" type="text" v-bind:value="cartItem.quantity">
-                  <span class="triangle-left">▲</span><span class="triangle-right">▼</span>
-
+                  <input type="number" @input="changeQuantity(cartItem.quantity, cartItem, $event)" style="font-size:13px; width: 60px" class="text-center form-control mx-auto" :value="cartItem.quantity">
               </div></div>
               <div class="col-4"><div class="valign-text text-right">${{(parseFloat(cartItem.unit_price) * parseInt(cartItem.quantity)).toFixed(2)}}</div></div>
             </div>
@@ -48,7 +46,11 @@
           <div class="col"><div class="float-right"><span>Sub Total &nbsp;</span> <span id="subtotal" class="font-weight-bold">{{computeSubtotal}}</span></div></div>
         </div>
         <div class="row checkout">
-          <div class="col"><div class="float-right"><button @click="processCheckOut()" class="btn chkout-btn">Checkout</button></div></div>
+          <div class="col">
+
+          <div class="float-right"><button @click="{{checkOut()}}" class="btn chkout-btn">Checkout</button></div>
+
+          </div>
         </div>
       </ul>
     </div>
@@ -67,16 +69,19 @@ export default {
   data () {
     return {
     user: [],
-    cartItems: [],
     subTotal: '',
-    currentItemCounts: '90'
     }
   },
+  mounted() {
+    this.$store.state.info = '';
+    this.$store.state.warning= '';
+  },
   computed: {
+
     computeSubtotal: function(){
       var sum = 0;
-      this.$store.state.cartItems.forEach(element => {
-        sum += (parseFloat(element.unit_price)*parseFloat(element.quantity));
+      this.$store.state.cartItems.forEach(item => {
+        sum += (parseFloat(item.unit_price)*parseFloat(item.quantity));
         //console.log(element.unit_price)
       });
       return "$"+sum.toFixed(2);
@@ -84,34 +89,67 @@ export default {
 
   },
   methods: {
-    processCheckOut(){
-      if(this.$store.state.loggedUser.length === 0){
-        this.$router.push('/login');
+    changeQuantity(oldVal, item, $event){
+
+      let newVal = event.target.value;
+      let addVal = (newVal-oldVal);
+
+      var i;
+      if(newVal > oldVal){
+        for(i=0; i<addVal; i++){
+          this.addCart(item);
+        }
+      }else{
+        let decreaseVal = (oldVal-newVal);
+
+        for(i=0; i<decreaseVal; i++){
+          this.removeItemInCart(item);
+        }
+
       }
+    },
+    reloadThis(){
+      this.$router.go('');
+    },
+    checkOut(){
+    if(this.$store.state.loggedUser.length === 0){
+      this.$router.push('/login');
+      this.$store.state.warning = "Please login with your username and password.";
+      this.$store.commit('clearWarning');
+    }else{
+      this.$router.push('/checkout');
+    }
+
     },
     getSrc(name) {
          var images = require.context('../assets/img/', false, /\.jpg$/);
          return images('./' + name)
      },
     ...mapMutations([
-      'removeCart'
+      'addCart', 'removeCart', 'removeItemInCart', 'reset', 'clearWarning'
     ]),
+    //remove the whole product item from cart
     removeFromCart(cartItem){
       //console.log(cartItem);
       this.$store.commit('removeCart', cartItem);
     },
-  },
-  mounted(){
-  //console.log(this.$store.state.cartItems);
+    //increase quantity of product item
+    addCartItem(){
+      this.$store.commit('addCart');
+      //this.currentItemCount();
+    },
+    //decrease quantity of product item
+    removeInCart(){
+      this.$store.commit('removeItemInCart');
+    },
+    resetStore(){
+      this.$store.commit('reset');
+    }
   }
 }
 </script>
 <style scoped>
-@import url("//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css")
 
-.main-container{
-  width:500px;
-}
 .cart-holder{
   min-height:300px;
 }
@@ -146,8 +184,6 @@ height:100px;
   font-size:16px;
 }
 
-
-
 @media only screen
 and (min-device-width : 320px)
 and (max-device-width : 480px) {
@@ -161,8 +197,7 @@ and (max-device-width : 480px) {
 @media only screen
 and (min-width : 1224px) {
   .main-container{
-    width:700px;
+    width:70%;
   }
-
 }
 </style>

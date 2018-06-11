@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 import Login from '@/components/Login'
 import Cart from '@/components/Cart'
+import Checkout from '@/components/Checkout'
 import Admin from '@/components/Admin'
 import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm'
 import 'bootstrap/dist/css/bootstrap.css'
@@ -17,7 +18,7 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      component: Home
+      component: Home,
     },
     {
       path: '/login',
@@ -32,7 +33,13 @@ export default new Router({
     {
       path: '/cart',
       name: 'Cart',
-      component: Cart
+      component: Cart,
+    },
+    {
+      path: '/checkout',
+      name: 'Checkout',
+      component: Checkout,
     }
-  ]
+  ],
+
 })

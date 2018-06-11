@@ -10,7 +10,9 @@ export default new Vuex.Store(
     state: {
       cartItems: [],
       loggedUser: [],
-      cartItemCount: ''
+      cartItemCount: '',
+      info: '',
+      warning: ''
     },
     mutations: {
       addCart(state, cartItem) {
@@ -19,7 +21,7 @@ export default new Vuex.Store(
             function (x){
               if(x.id == cartItem['id']){
                 x.quantity +=1;
-                console.log("found " + cartItem["name"] + " with " + x.quantity);
+                //console.log("found " + cartItem["name"] + " with " + x.quantity);
                 return true;
               }else{
                 return false;
@@ -32,7 +34,6 @@ export default new Vuex.Store(
             state.cartItems.push(cartItem);
           }
 
-
           var i=0;
           var itemQuantity = 0;
           var num=0;
@@ -42,12 +43,15 @@ export default new Vuex.Store(
             itemQuantity += num;
           }
           state.cartItemCount = Number(itemQuantity.toString());
-
           //console.log(found);
           //console.log(state.cartItems);
-
-
+          state.info = "Item added to cart"
+          setTimeout(function() {
+            state.info = ""
+          }, 6000);
+          return;
       },
+
       removeCart(state, cartItem) {
         state.cartItems = state.cartItems.filter(item => item !== cartItem);
         var i=0;
@@ -60,10 +64,52 @@ export default new Vuex.Store(
         }
         state.cartItemCount = Number(itemQuantity.toString());
         //console.log(state.cartItems);
+        state.info = "Item removed from cart";
+        setTimeout(function() {
+          state.info = ""
+        }, 6000);
+
+        return;
       },
 
       addUser(state, user){
         state.loggedUser.push(user);
+      },
+
+      removeUser(state, user){
+        state.loggedUser = [];
+      },
+
+      reset(state, cartItem){
+        state.cartItems = undefined;
+        state.cartItemCount = '';
+      },
+
+      clearWarning(state, warning){
+        setTimeout(function() {
+          state.warning = "";
+          start.info = "";
+        }, 6000);
+      },
+
+      removeItemInCart(state, cartItem){
+        var oldCartItemCount = state.cartItemCount;
+        var found = state.cartItems.filter(
+          function (x){
+            if(x.id == cartItem['id']){
+              x.quantity -=1;
+              //console.log("found " + cartItem["name"] + " with " + x.quantity);
+              return true;
+            }else{
+              return false;
+            }
+          }
+        );
+        state.cartItemCount = Number((oldCartItemCount - 1));
+        state.info = "Item removed from cart"
+        setTimeout(function() {
+          state.info = ""
+        }, 6000);
       }
     },
     getters: {

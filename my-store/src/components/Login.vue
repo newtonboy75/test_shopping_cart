@@ -25,8 +25,6 @@ import { mapActions } from 'vuex'
 import { mapMutations } from 'vuex'
 import * as Cookies from "js-cookie";
 
-
-
 export default {
   name: 'App',
   data () {
@@ -61,8 +59,8 @@ export default {
         e.preventDefault();
       },
     getUser(username, password){
-    let app = this;
-        axios.get('http://localhost/test_shopping_cart/Main.php?dest=user&username='+username+'&password='+password)
+      let app = this;
+        axios.get('http://newtonboy.cba.pl/main.php?dest=user&username='+username+'&password='+password)
         .then( response => {
         console.log(response.data);
           if(response.data == "0"){
@@ -70,7 +68,8 @@ export default {
           }else{
             this.addUser(this.user = response.data);
             this.$store.commit('addUser');
-            app.$router.push('/');
+            //app.$router.push('/');
+            this.$router.go(-1);
           }
         }).catch((error) => {
             app.responseError();
